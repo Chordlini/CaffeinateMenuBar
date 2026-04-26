@@ -1,0 +1,24 @@
+{
+  "name": "caffeinatemenubar",
+  "version": "1.0.0",
+  "description": "A minimal, beautiful macOS menu bar app that prevents your Mac from sleeping with a single click. No windows, no menus, no fuss — just a coffee cup in your menu bar.",
+  "main": "render_logo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chordlini/CaffeinateMenuBar.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Chordlini/CaffeinateMenuBar/issues"
+  },
+  "homepage": "https://github.com/Chordlini/CaffeinateMenuBar#readme",
+  "dependencies": {
+    "playwright": "^1.59.1"
+  }
+}

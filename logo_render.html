@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { margin: 0; background: transparent; display: flex; justify-content: center; align-items: center; height: 100vh; }
+  canvas { image-rendering: pixelated; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1024" height="1024"></canvas>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 1024, H = 1024;
+
+// Clear transparent
+ctx.clearRect(0, 0, W, H);
+
+const DOT = 18; // dot diameter
+const GAP = 6;  // gap between dots
+const STEP = DOT + GAP;
+const COLS = 32;
+const ROWS = 32;
+const OFFSET_X = (W - COLS * STEP) / 2 + STEP/2;
+const OFFSET_Y = (H - ROWS * STEP) / 2 + STEP/2;
+
+// Dot matrix map: 1 = cup, 2 = steam, 0 = empty
+// 32x32 grid
+const map = [
+  "00000000000000000000000000000000",
+  "00000000000000000000000000000000",
+  "00000000000000000000000000000000",
+  "00000000000000000000000000000000",
+  "00000000000000000000000000000000",
+  "00000000000222000000000000000000",
+  "00000000002222200000000000000000",
+  "00000000002222220000000000000000",
+  "00000000002222222000000000000000",
+  "00000000000222222000000000000000",
+  "00000000000022220000000000000000",
+  "00000000000002200000000000000000",
+  "00000000000000000000000000000000",
+  "00000000000000000000000000000000",
+  "00000000011111111000000000000000",
+  "00000000111111111100000000000000",
+  "00000001111111111110000000000000",
+  "00000011111111111111000000000000",
+  "00000011111111111111000000000000",
+  "00000011111111111111000000000000",
+  "00000011111111111111000000000000",
+  "00000011111111111111000000000000",
+  "00000011111111111111000000000000",
+  "00000011111111111111000000000000",
+  "00000011111111111111000000000000",
+  "00000011111111111111000000000000",
+  "00000011111111111111000000000000",
+  "00000001111111111110000000000000",
+  "00000000111111111100000000000000",
+  "00000000011111111000000000000000",
+  "00000000000000000000000000000000",
+  "00000000000000000000000000000000",
+];
+
+// Handle dots (extra)
+const handleDots = [
+  [24,15],[25,15],[26,16],[27,17],[27,18],[27,19],[27,20],[27,21],[27,22],[26,23],[25,24],[24,24]
+];
+
+const cupColor = '#2d2d2d';
+const steamColor = '#ff9500';
+
+function drawDot(x, y, color) {
+  const px = OFFSET_X + x * STEP;
+  const py = OFFSET_Y + y * STEP;
+  ctx.beginPath();
+  ctx.arc(px, py, DOT/2, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
+// Draw cup body from map
+for (let y = 0; y < ROWS; y++) {
+  for (let x = 0; x < COLS; x++) {
+    const ch = map[y][x];
+    if (ch === '1') drawDot(x, y, cupColor);
+    else if (ch === '2') drawDot(x, y, steamColor);
+  }
+}
+
+// Draw handle
+handleDots.forEach(([x, y]) => drawDot(x, y, cupColor));
+
+// Add subtle glow to steam dots
+for (let y = 0; y < ROWS; y++) {
+  for (let x = 0; x < COLS; x++) {
+    if (map[y][x] === '2') {
+      const px = OFFSET_X + x * STEP;
+      const py = OFFSET_Y + y * STEP;
+      const grad = ctx.createRadialGradient(px, py, DOT/2, px, py, DOT * 1.5);
+      grad.addColorStop(0, 'rgba(255, 149, 0, 0.25)');
+      grad.addColorStop(1, 'rgba(255, 149, 0, 0)');
+      ctx.beginPath();
+      ctx.arc(px, py, DOT * 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+  }
+}
+</script>
+</body>
+</html>
